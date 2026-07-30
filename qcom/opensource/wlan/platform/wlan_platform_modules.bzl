@@ -1,6 +1,6 @@
 load("//build/bazel_common_rules/dist:dist.bzl", "copy_to_dist_dir")
 load("//build/kernel/kleaf:kernel.bzl", "ddk_module")
-load("//msm-kernel:target_variants.bzl", "get_all_variants", "get_arch_of_target")
+load("//kernel/xiaomi/sm8650:target_variants.bzl", "get_all_variants", "get_arch_of_target")
 
 _default_module_enablement_list = [
     "cnss_nl",
@@ -91,12 +91,12 @@ def _define_modules_for_target_variant(target, variant):
             ":{}_cnss_prealloc".format(tv),
             ":{}_wlan_firmware_service".format(tv),
             ":{}_cnss_plat_ipc_qmi_svc".format(tv),
-            "//msm-kernel:all_headers",
-            "//msm-kernel:hwid_headers",
+            "//kernel/xiaomi/sm8650:all_headers",
+            "//kernel/xiaomi/sm8650:hwid_headers",
             ":wlan-platform-headers",
         ]
         if target != "anorak":
-            deps.append("//vendor/qcom/opensource/securemsm-kernel:{}_smcinvoke_dlkm".format(tv))
+            deps.append("//kernel/xiaomi/sm8650-modules/qcom/opensource/securemsm-kernel:{}_smcinvoke_dlkm".format(tv))
 
         ddk_module(
             name = "{}_cnss2".format(tv),
@@ -128,7 +128,7 @@ def _define_modules_for_target_variant(target, variant):
                 },
             },
             out = "cnss2.ko",
-            kernel_build = "//msm-kernel:{}".format(tv),
+            kernel_build = "//kernel/xiaomi/sm8650:{}".format(tv),
             deps = deps,
         )
 
@@ -158,13 +158,13 @@ def _define_modules_for_target_variant(target, variant):
                 },
             },
             out = "icnss2.ko",
-            kernel_build = "//msm-kernel:{}".format(tv),
+            kernel_build = "//kernel/xiaomi/sm8650:{}".format(tv),
             deps = [
                 ":{}_cnss_utils".format(tv),
                 ":{}_cnss_prealloc".format(tv),
                 ":{}_wlan_firmware_service".format(tv),
-                "//msm-kernel:hwid_headers",
-                "//msm-kernel:all_headers",
+                "//kernel/xiaomi/sm8650:hwid_headers",
+                "//kernel/xiaomi/sm8650:all_headers",
                 ":wlan-platform-headers",
             ],
         )
@@ -179,9 +179,9 @@ def _define_modules_for_target_variant(target, variant):
         kconfig = "cnss_genl/Kconfig",
         defconfig = defconfig,
         out = "cnss_nl.ko",
-        kernel_build = "//msm-kernel:{}".format(tv),
+        kernel_build = "//kernel/xiaomi/sm8650:{}".format(tv),
         deps = [
-            "//msm-kernel:all_headers",
+            "//kernel/xiaomi/sm8650:all_headers",
             ":wlan-platform-headers",
         ],
     )
@@ -199,9 +199,10 @@ def _define_modules_for_target_variant(target, variant):
         kconfig = "cnss_prealloc/Kconfig",
         defconfig = defconfig,
         out = "cnss_prealloc.ko",
-        kernel_build = "//msm-kernel:{}".format(tv),
+        kernel_build = "//kernel/xiaomi/sm8650:{}".format(tv),
         deps = [
-            "//msm-kernel:all_headers",
+            "//kernel/xiaomi/sm8650:all_headers",
+            "//kernel/xiaomi/sm8650:wlan_slab_private_header",
             ":wlan-platform-headers",
         ],
     )
@@ -218,9 +219,9 @@ def _define_modules_for_target_variant(target, variant):
         kconfig = "cnss_utils/Kconfig",
         defconfig = defconfig,
         out = "cnss_utils.ko",
-        kernel_build = "//msm-kernel:{}".format(tv),
+        kernel_build = "//kernel/xiaomi/sm8650:{}".format(tv),
         deps = [
-            "//msm-kernel:all_headers",
+            "//kernel/xiaomi/sm8650:all_headers",
             ":wlan-platform-headers",
         ],
     )
@@ -238,8 +239,8 @@ def _define_modules_for_target_variant(target, variant):
         kconfig = "cnss_utils/Kconfig",
         defconfig = defconfig,
         out = "wlan_firmware_service.ko",
-        kernel_build = "//msm-kernel:{}".format(tv),
-        deps = ["//msm-kernel:all_headers"],
+        kernel_build = "//kernel/xiaomi/sm8650:{}".format(tv),
+        deps = ["//kernel/xiaomi/sm8650:all_headers"],
     )
 
     module = "cnss_utils"
@@ -255,8 +256,8 @@ def _define_modules_for_target_variant(target, variant):
             kconfig = "cnss_utils/Kconfig",
             defconfig = defconfig,
             out = "cnss_plat_ipc_qmi_svc.ko",
-            kernel_build = "//msm-kernel:{}".format(tv),
-            deps = ["//msm-kernel:all_headers"],
+            kernel_build = "//kernel/xiaomi/sm8650:{}".format(tv),
+            deps = ["//kernel/xiaomi/sm8650:all_headers"],
         )
     tv = "{}_{}".format(target, variant)
     copy_to_dist_dir(
