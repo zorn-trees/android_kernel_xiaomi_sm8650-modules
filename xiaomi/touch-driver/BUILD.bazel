@@ -37,12 +37,22 @@ ddk_headers(
     hdrs = glob([
             "q200/focaltech_3383/*.h",
             "q200/focaltech_3383/**/*.h",
-            "q200/focaltech_3383/**/*.i",
         ]
     ),
     includes = [
         "q200/focaltech_3383",
     ]
+)
+
+ddk_headers(
+    name = "zorn_focal_headers",
+    hdrs = glob([
+        "o11/focaltech_3683/*.h",
+        "o11/focaltech_3683/**/*.h",
+    ]),
+    includes = [
+        "o11/focaltech_3683",
+    ],
 )
 
 ddk_headers(
@@ -58,7 +68,13 @@ ddk_headers(
 
 ddk_headers(
     name = "touch_drivers_headers",
-    hdrs = ["p2_goodix_headers", ":q200_focal_headers", ":p2_headers", ":xiaomi_touch_headers"]
+    hdrs = [
+        "p2_goodix_headers",
+        ":q200_focal_headers",
+        ":p2_headers",
+        ":xiaomi_touch_headers",
+        ":zorn_focal_headers",
+    ]
 )
 
 print("touch_drivers_headers")

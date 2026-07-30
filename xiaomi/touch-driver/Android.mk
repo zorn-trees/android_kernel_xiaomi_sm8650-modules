@@ -13,3 +13,8 @@ ifneq (, $(filter $(call get-miodm-device-name), pandora))
 $(info "touch driver build for $(call get-miodm-device-name)")
 include $(LOCAL_PATH)/q200/Android.mk
 endif
+
+ifneq (, $(filter $(call get-miodm-device-name), zorn))
+$(info "touch driver build for $(call get-miodm-device-name)")
+include $(LOCAL_PATH)/o11/Android.mk
+endif

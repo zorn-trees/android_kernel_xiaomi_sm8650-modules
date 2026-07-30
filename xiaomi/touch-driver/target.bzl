@@ -5,9 +5,11 @@ load(":build/canoe.bzl", "define_canoe")
 load(":build/pandora.bzl", "define_pandora")
 load(":build/popsicle.bzl", "define_popsicle")
 load(":build/pudding.bzl", "define_pudding")
+load(":build/zorn.bzl", "define_zorn")
 
 
 def define_touch_target():
+    define_zorn()
     for (t, v) in get_all_la_variants() + get_all_le_variants() + get_all_device_variants():
         if t == "popsicle":
             define_popsicle(t, v)

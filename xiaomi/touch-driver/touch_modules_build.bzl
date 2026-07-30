@@ -14,10 +14,11 @@ def _create_module_conditional_src_map(conditional_srcs):
 
     return processed_conditional_srcs
 
-def _register_module_to_map(module_map, name, path, config_option, srcs, deps, kconfig, defconfig, conditional_srcs, copts):
+def _register_module_to_map(module_map, name, out, path, config_option, srcs, deps, kconfig, defconfig, conditional_srcs, copts):
 
     module = struct(
         name = name,
+        out = out,
         path = path,
         srcs = srcs,
         deps = deps,
@@ -57,8 +58,8 @@ def _get_kernel_build_module_deps(module, formatter):
 def touch_module_entry(hdrs = []):
     module_map = {}
 
-    def register(name, path = None, config_option = [], srcs = [], config_srcs = None, deps = None, kconfig = None, defconfig = None, conditional_srcs = None, copts = []):
-        _register_module_to_map(module_map, name, path, config_option, srcs, deps, kconfig, defconfig, conditional_srcs, copts)
+    def register(name, out = None, path = None, config_option = [], srcs = [], config_srcs = None, deps = None, kconfig = None, defconfig = None, conditional_srcs = None, copts = []):
+        _register_module_to_map(module_map, name, out or name, path, config_option, srcs, deps, kconfig, defconfig, conditional_srcs, copts)
 
     return struct(
         register = register,
@@ -69,25 +70,11 @@ def touch_module_entry(hdrs = []):
 def define_target_variant_modules(target, device, variant, registry, modules, module_config_options = {}):
     kernel_build = "{}_{}".format(device, variant)
     print("touch Defining kernel build: ", kernel_build)
-    kernel_build_label = select({
-        "//build/kernel/kleaf:socrepo_true": "//soc-repo:{}_base_kernel".format(kernel_build),
-        "//build/kernel/kleaf:socrepo_false": "//msm-kernel:{}".format(kernel_build),
-    })
+    kernel_build_label = "//kernel/xiaomi/sm8650:{}".format(kernel_build)
     modules = [registry.get(module_name) for module_name in modules]
     build_print = lambda message: print("{}: {}".format(kernel_build, message))
     formatter = lambda s: s.replace("%b", kernel_build).replace("%t", target).replace("%d", device).replace("%v", variant)
-    deps = select({
-        "//build/kernel/kleaf:socrepo_true": [
-            "//soc-repo:all_headers",
-            "//soc-repo:{}/drivers/pinctrl/qcom/pinctrl-msm".format(kernel_build),
-            "//soc-repo:{}/drivers/soc/qcom/panel_event_notifier".format(kernel_build),
-            "//soc-repo:{}/drivers/virt/gunyah/gh_mem_notifier".format(kernel_build),
-            "//soc-repo:{}/drivers/virt/gunyah/gh_irq_lend".format(kernel_build),
-            "//soc-repo:{}/drivers/virt/gunyah/gh_rm_drv".format(kernel_build),
-            "//soc-repo:{}/drivers/misc/miev".format(kernel_build),
-        ],
-        "//build/kernel/kleaf:socrepo_false": ["//msm-kernel:all_headers"],
-    })
+    deps = ["//kernel/xiaomi/sm8650:all_headers"]
 
     # xiaomi defined factory micro
     factory_copts = select({
@@ -127,7 +114,7 @@ def define_target_variant_modules(target, device, variant, registry, modules, mo
         ddk_module(
             name = rule_name,
             srcs = module_srcs,
-            out = "{}.ko".format(module.name),
+            out = "{}.ko".format(module.out),
             kernel_build = kernel_build_label,
             deps = deps + module_dep + registry.hdrs,
             local_defines = options.keys(),

@@ -11,8 +11,8 @@
 #define TOUCH_ID    0
 #define MAX_BUF_SIZE (sizeof(common_data_t))
 
-enum MI_TP_LOG_LEVEL current_log_level = MI_TP_LOG_INFO;
-EXPORT_SYMBOL_GPL(current_log_level);
+enum MI_TP_LOG_LEVEL tp_current_log_level = MI_TP_LOG_INFO;
+EXPORT_SYMBOL_GPL(tp_current_log_level);
 
 typedef struct abnormal_event {
 	u16 type;
@@ -373,10 +373,12 @@ CREATE_ATTR(palm_sensor, {
 	},
 	{
 		int input;
+		xiaomi_touch_driver_param_t *xiaomi_touch_driver_param;
+
 		if (sscanf(buf, "%d", &input) < 0)
 			return -EINVAL;
 
-		xiaomi_touch_driver_param_t *xiaomi_touch_driver_param = get_xiaomi_touch_driver_param(TOUCH_ID);
+		xiaomi_touch_driver_param = get_xiaomi_touch_driver_param(TOUCH_ID);
 		if (xiaomi_touch_driver_param && xiaomi_touch_driver_param->hardware_operation.palm_sensor_write)
 			xiaomi_touch_driver_param->hardware_operation.palm_sensor_write(!!input);
 
@@ -391,10 +393,12 @@ CREATE_ATTR(palm_sensor_1, {
 	{
 		int input;
 		int touch_id = 1;
+		xiaomi_touch_driver_param_t *xiaomi_touch_driver_param;
+
 		if (sscanf(buf, "%d", &input) < 0)
 			return -EINVAL;
 
-		xiaomi_touch_driver_param_t *xiaomi_touch_driver_param = get_xiaomi_touch_driver_param(touch_id);
+		xiaomi_touch_driver_param = get_xiaomi_touch_driver_param(touch_id);
 		if (xiaomi_touch_driver_param && xiaomi_touch_driver_param->hardware_operation.palm_sensor_write)
 			xiaomi_touch_driver_param->hardware_operation.palm_sensor_write(!!input);
 
@@ -651,7 +655,7 @@ CREATE_ATTR(touch_log_level, {
 				"[value0]: control xiaomi_touch log level, 0:Always,1:Error,2:Warning,3:Info,4:Debug,5:Verbose\n"
 				"[value1]: control vendor driver log level, 0:Always,1:Error,2:Warning,3:Info,4:Debug,5:Verbose\n"
 				"current xiaomi_touch log_level = %d, vendor log_level = %d\n",
-				current_log_level, vendor_input);
+				tp_current_log_level, vendor_input);
 	},
 	{
 		int input;
@@ -660,7 +664,7 @@ CREATE_ATTR(touch_log_level, {
 
 		if (sscanf(buf, "%d %d", &input, &vendor_input) < 0)
 			return -EINVAL;
-		current_log_level = input;
+		tp_current_log_level = input;
 		for (touch_id = 0; touch_id < MAX_TOUCH_PANEL_COUNT; touch_id++) {
 			xiaomi_touch_driver_param = get_xiaomi_touch_driver_param(touch_id);
 			if (xiaomi_touch_driver_param == NULL)
@@ -709,7 +713,7 @@ int xiaomi_touch_sys_init(void)
 {
 	int ret = 0;
 	LOG_ALWAYS("enter");
-	xiaomi_touch_class = class_create("touch");
+	xiaomi_touch_class = class_create(THIS_MODULE, "touch");
 
 	if (!xiaomi_touch_class) {
 		LOG_ERROR("create device class err");

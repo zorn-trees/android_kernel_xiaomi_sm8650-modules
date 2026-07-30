@@ -60,6 +60,26 @@ module_entry(
     ]
 )
 
+module_entry(
+    name = "focaltech_touch_zorn",
+    out = "focaltech_touch",
+    config_option = "CONFIG_TOUCHSCREEN_FOCALTECH_3683",
+    srcs = [
+            "o11/focaltech_3683/focaltech_core.c",
+            "o11/focaltech_3683/focaltech_ex_fun.c",
+            "o11/focaltech_3683/focaltech_ex_mode.c",
+            "o11/focaltech_3683/focaltech_gesture.c",
+            "o11/focaltech_3683/focaltech_esdcheck.c",
+            "o11/focaltech_3683/focaltech_point_report_check.c",
+            "o11/focaltech_3683/focaltech_flash/focaltech_upgrade_ft3683g.c",
+            "o11/focaltech_3683/focaltech_flash.c",
+            "o11/focaltech_3683/focaltech_spi.c",
+    ],
+    deps = [
+            "xiaomi_touch",
+    ],
+)
+
 #define ddk_module() for synaptics_tcm2
 module_entry(
     name = "synaptics_tcm2",

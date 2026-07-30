@@ -124,46 +124,47 @@ typedef enum {
 } syna_shub_ipc_cmd_type_t;
 #endif
 
-extern enum MI_TP_LOG_LEVEL current_log_level;
+extern enum MI_TP_LOG_LEVEL tp_current_log_level;
+extern bool resume_skip;
 
 #define LOG_ALWAYS(fmt, args...)\
 		do {\
-			if (current_log_level >= MI_TP_LOG_ALWAYS) {\
+			if (tp_current_log_level >= MI_TP_LOG_ALWAYS) {\
 				pr_info(LOG_TAG "_A][%s:%d]: " fmt, __func__, __LINE__, ##args);\
 			}\
 		} while (0)
 
 #define LOG_ERROR(fmt, args...)\
 		do {\
-			if (current_log_level >= MI_TP_LOG_ERROR) {\
+			if (tp_current_log_level >= MI_TP_LOG_ERROR) {\
 				pr_info(LOG_TAG "_E][%s:%d]: " fmt, __func__, __LINE__, ##args);\
 			}\
 		} while (0)
 
 #define LOG_WARNING(fmt, args...)\
 		do {\
-			if (current_log_level >= MI_TP_LOG_WARNING) {\
+			if (tp_current_log_level >= MI_TP_LOG_WARNING) {\
 				pr_info(LOG_TAG "_W][%s:%d]: " fmt, __func__, __LINE__, ##args);\
 			}\
 		} while (0)
 
 #define LOG_INFO(fmt, args...)\
 		do {\
-			if (current_log_level >= MI_TP_LOG_INFO) {\
+			if (tp_current_log_level >= MI_TP_LOG_INFO) {\
 				pr_info(LOG_TAG "_I][%s:%d]: " fmt, __func__, __LINE__, ##args);\
 			}\
 		} while (0)
 
 #define LOG_DEBUG(fmt, args...)\
 		do {\
-			if (current_log_level >= MI_TP_LOG_DEBUG) {\
+			if (tp_current_log_level >= MI_TP_LOG_DEBUG) {\
 				pr_info(LOG_TAG "_D][%s:%d]: " fmt, __func__, __LINE__, ##args);\
 			}\
 		} while (0)
 
 #define LOG_VERBOSE(fmt, args...)\
 		do {\
-			if (current_log_level >= MI_TP_LOG_VERBOSE) {\
+			if (tp_current_log_level >= MI_TP_LOG_VERBOSE) {\
 				pr_info(LOG_TAG "_V][%s:%d]: " fmt, __func__, __LINE__, ##args);\
 			}\
 		} while (0)
@@ -405,4 +406,9 @@ void unregister_xiaomi_stylus_input_dev(s8 touch_id);
 int report_touch_event(s8 touch_id, u8 event_count);
 dma_addr_t get_report_point_info_phy_addr(void);
 void nfc_to_touch_event(s8 touch_id,u8 val);
+void xiaomi_touch_mievent_report_int(int event_id, int touch_id,
+				    const char *module, const char *key,
+				    long value);
+void xiaomi_touch_mievent_report_str(int event_id, int touch_id,
+				    const char *module, const char *value);
 #endif

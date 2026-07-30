@@ -683,7 +683,9 @@ static void xiaomi_touch_suspend_tddi(s8 touch_id)
 {
 	xiaomi_touch_data_t *xiaomi_touch_data = get_xiaomi_touch_data(touch_id);
 	xiaomi_touch_driver_param_t *xiaomi_touch_driver_param = get_xiaomi_touch_driver_param(touch_id);
+#ifdef TOUCH_THP_SUPPORT
 	int value = 1;
+#endif
 
 	LOG_INFO("touch id %d enter", touch_id);
 	if (!xiaomi_touch_data || !xiaomi_touch_driver_param)
@@ -701,8 +703,8 @@ static void xiaomi_touch_suspend_tddi(s8 touch_id)
 	}
 	enable_temperature_detection_func(touch_id,false);
 #ifdef TOUCH_THP_SUPPORT
-		LOG_INFO("suspend to thp");
-		add_common_data_to_buf(touch_id, SET_CUR_VALUE, DATA_MODE_27, 1, &value);
+	LOG_INFO("suspend to thp");
+	add_common_data_to_buf(touch_id, SET_CUR_VALUE, DATA_MODE_27, 1, &value);
 #endif
 	xiaomi_touch_data->is_suspend = true;
 	/* other suspend to do */
@@ -1053,7 +1055,7 @@ static int xiaomi_touch_probe(struct platform_device *pdev)
 	return 0;
 }
 
-static void xiaomi_touch_remove(struct platform_device *pdev)
+static int xiaomi_touch_remove(struct platform_device *pdev)
 {
 	LOG_INFO("enter");
 	xiaomi_touch_evdev_remove();
@@ -1066,6 +1068,8 @@ static void xiaomi_touch_remove(struct platform_device *pdev)
 	knock_node_release();
 #endif
 	LOG_INFO("over");
+
+	return 0;
 }
 
 #if defined(TOUCH_PLATFORM_XRING)

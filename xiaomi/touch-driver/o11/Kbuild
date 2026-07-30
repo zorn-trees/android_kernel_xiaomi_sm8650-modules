@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: GPL-2.0-only
+
+# Zorn uses the common Xiaomi Touch V3 THP and under-display FOD paths.
+KBUILD_CPPFLAGS += -DTOUCH_THP_SUPPORT
+KBUILD_CPPFLAGS += -DTOUCH_FOD_SUPPORT
+KBUILD_CPPFLAGS += -DCMD_DATA_BUF_SIZE=256
+
+obj-m += ../xiaomi/
+obj-m += focaltech_3683/

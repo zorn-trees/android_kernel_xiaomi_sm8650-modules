@@ -4,6 +4,9 @@
 #include "xiaomi_touch.h"
 #include "xiaomi_touch_type_common.h"
 
+bool resume_skip;
+EXPORT_SYMBOL_GPL(resume_skip);
+
 #define GRIP_RECT_NUM 12
 #define GRIP_PARAMETER_NUM 8
 #define MI_GRIP_PARAMETERS_SIZE 32
@@ -526,8 +529,10 @@ static void xiaomi_touch_set_mode_value(common_data_t *common_data)
 	case DATA_MODE_19:
 		touch_mode[touch_id][mode][GET_CUR_VALUE] = val;
 		if (val) {
-			schedule_resume_suspend_work(touch_id, true);
+			if (!resume_skip)
+				schedule_resume_suspend_work(touch_id, true);
 		} else {
+			resume_skip = false;
 			schedule_resume_suspend_work(touch_id, false);
 		}
 		break;
@@ -574,7 +579,7 @@ static void xiaomi_touch_set_mode_value(common_data_t *common_data)
 	case DATA_MODE_18:
 		LOG_INFO("Touch debug log level [%d]", val);
 		touch_mode[touch_id][mode][GET_CUR_VALUE] = val;
-		current_log_level = val;
+		tp_current_log_level = val;
 		if (xiaomi_touch_driver_param->hardware_operation.touch_log_level_control_v2)
 			xiaomi_touch_driver_param->hardware_operation.touch_log_level_control_v2(val);
 		break;
