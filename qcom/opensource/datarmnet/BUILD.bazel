@@ -5,6 +5,10 @@ define_modules("pineapple", "consolidate")
 
 define_modules("pineapple", "gki")
 
+define_modules("zorn", "consolidate")
+
+define_modules("zorn", "gki")
+
 define_modules("blair", "consolidate")
 
 define_modules("blair", "gki")

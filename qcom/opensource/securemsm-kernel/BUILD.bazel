@@ -81,6 +81,7 @@ load(":build/niobe.bzl", "define_niobe")
 load(":build/monaco.bzl", "define_monaco")
 
 define_pineapple()
+define_pineapple("zorn")
 define_anorak()
 define_blair()
 define_niobe()

@@ -1,8 +1,8 @@
 load(":securemsm_kernel.bzl", "define_consolidate_gki_modules")
 
-def define_pineapple():
+def define_pineapple(target = "pineapple"):
     define_consolidate_gki_modules(
-        target = "pineapple",
+        target = target,
         modules = [
             "smcinvoke_dlkm",
             "tz_log_dlkm",

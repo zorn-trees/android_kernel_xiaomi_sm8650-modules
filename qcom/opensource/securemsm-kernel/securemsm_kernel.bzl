@@ -69,7 +69,9 @@ def define_target_variant_modules(target, variant, modules, extra_options = [], 
     modules = [securemsm_modules[module_name] for module_name in modules]
     tv = "{}_{}".format(target, variant)
 
-    target_local_defines = ["SMCINVOKE_TRACE_INCLUDE_PATH=../../../{}/smcinvoke".format(native.package_name())]
+    target_local_defines = [
+        "SMCINVOKE_TRACE_INCLUDE_PATH=../../../../../{}/smcinvoke".format(native.package_name()),
+    ]
 
     for config in extra_options:
         target_local_defines.append(config)
@@ -79,10 +81,10 @@ def define_target_variant_modules(target, variant, modules, extra_options = [], 
 
         ddk_module(
             name = rule_name,
-            kernel_build = "//msm-kernel:{}".format(kernel_build_variant),
+            kernel_build = "//kernel/xiaomi/sm8650:{}".format(kernel_build_variant),
             srcs = module_srcs,
             out = "{}.ko".format(module["name"]),
-            deps = ["//msm-kernel:all_headers"] + [_replace_formatting_codes(target, variant, dep) for dep in module["deps"]],
+            deps = ["//kernel/xiaomi/sm8650:all_headers"] + [_replace_formatting_codes(target, variant, dep) for dep in module["deps"]],
             hdrs = module["hdrs"],
             local_defines = target_local_defines,
             copts = module["copts"],
@@ -102,7 +104,7 @@ def define_target_variant_modules(target, variant, modules, extra_options = [], 
 
     kernel_modules_install(
         name = "{}_modules_install".format(kernel_build_variant),
-        kernel_build = "//msm-kernel:{}".format(kernel_build_variant),
+        kernel_build = "//kernel/xiaomi/sm8650:{}".format(kernel_build_variant),
         kernel_modules = module_rules,
     )
 

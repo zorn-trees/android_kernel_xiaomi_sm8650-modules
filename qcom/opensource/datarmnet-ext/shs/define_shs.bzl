@@ -3,7 +3,7 @@ load("//build/kernel/kleaf:kernel.bzl", "ddk_module")
 
 def define_shs(target, variant):
     kernel_build_variant = "{}_{}".format(target, variant)
-    include_base = "../../../{}".format(native.package_name())
+    include_base = "../../../../../{}".format(native.package_name())
 
     ddk_module(
         name = "{}_shs".format(kernel_build_variant),
@@ -28,11 +28,11 @@ def define_shs(target, variant):
             "rmnet_shs_wq_mem.c",
             "rmnet_shs_wq_mem.h",
         ],
-        kernel_build = "//msm-kernel:{}".format(kernel_build_variant),
+        kernel_build = "//kernel/xiaomi/sm8650:{}".format(kernel_build_variant),
         deps = [
-            "//msm-kernel:all_headers",
-            "//vendor/qcom/opensource/datarmnet:{}_rmnet_core".format(kernel_build_variant),
-            "//vendor/qcom/opensource/datarmnet:rmnet_core_headers",
+            "//kernel/xiaomi/sm8650:all_headers",
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/datarmnet:{}_rmnet_core".format(kernel_build_variant),
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/datarmnet:rmnet_core_headers",
         ],
         copts = ["-Wno-misleading-indentation"],
     )

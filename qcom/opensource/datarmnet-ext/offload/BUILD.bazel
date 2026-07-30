@@ -5,6 +5,10 @@ define_offload("pineapple", "consolidate")
 
 define_offload("pineapple", "gki")
 
+define_offload("zorn", "consolidate")
+
+define_offload("zorn", "gki")
+
 define_offload("blair", "consolidate")
 
 define_offload("blair", "gki")
