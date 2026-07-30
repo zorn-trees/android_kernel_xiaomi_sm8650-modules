@@ -1,8 +1,8 @@
 load(":display_modules.bzl", "display_driver_modules")
 load(":display_driver_build.bzl", "define_target_variant_modules")
-load("//msm-kernel:target_variants.bzl", "get_all_la_variants", "get_all_le_variants", "get_all_lxc_variants")
+load("//kernel/xiaomi/sm8650:target_variants.bzl", "get_all_la_variants", "get_all_le_variants", "get_all_lxc_variants")
 load(":display_drivers_auto/target_auto.bzl", "define_pineapple_auto")
-load("//msm-kernel:target_variants.bzl", "get_all_lunch_target_base_target_variants")
+load("//kernel/xiaomi/sm8650:target_variants.bzl", "get_all_lunch_target_base_target_variants")
 
 def define_pineapple(t, v, lt=None):
     define_target_variant_modules(

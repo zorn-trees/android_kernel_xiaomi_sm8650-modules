@@ -2,8 +2,8 @@ load(":display_driver_build.bzl", "display_module_entry")
 
 display_driver_modules = display_module_entry([
                             ":display_drivers_headers",
-                            "//msm-kernel:mi_irq_headers",
-                            "//msm-kernel:miev_headers",
+                            "//kernel/xiaomi/sm8650:mi_irq_headers",
+                            "//kernel/xiaomi/sm8650:miev_headers",
                         ])
 module_entry = display_driver_modules.register
 
@@ -199,19 +199,19 @@ module_entry(
       },
       config_deps = {
         "CONFIG_HDCP_QSEECOM" : [
-            "//vendor/qcom/opensource/securemsm-kernel:%b_hdcp_qseecom_dlkm"
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/securemsm-kernel:%b_hdcp_qseecom_dlkm"
         ],
         "CONFIG_MSM_MMRM" : [
-            "//vendor/qcom/opensource/mmrm-driver:%b_mmrm_driver"
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/mmrm-driver:%b_mmrm_driver"
         ],
         "CONFIG_QCOM_SPEC_SYNC" : [
-            "//vendor/qcom/opensource/mm-drivers/sync_fence:%b_sync_fence"
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/mm-drivers/sync_fence:%b_sync_fence"
         ],
         "CONFIG_QTI_HW_FENCE" : [
-            "//vendor/qcom/opensource/mm-drivers/hw_fence:%b_msm_hw_fence"
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/mm-drivers/hw_fence:%b_msm_hw_fence"
         ],
         "CONFIG_MSM_EXT_DISPLAY" : [
-            "//vendor/qcom/opensource/mm-drivers/msm_ext_display:%b_msm_ext_display"
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/mm-drivers/msm_ext_display:%b_msm_ext_display"
         ],
        }
 )
