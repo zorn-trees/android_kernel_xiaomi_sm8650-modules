@@ -16,6 +16,7 @@ The initial repository tree was assembled from these depth-1 source snapshots:
 | `qcom/opensource/datarmnet-ext` | CodeLinaro `LA.VENDOR.14.3.0.r1-14500-lanai.0` at `a167b03697bd705f21374e8873ef7c0b26b562b4` |
 | `qcom/opensource/securemsm-kernel` | CodeLinaro `LA.VENDOR.14.3.0.r1-14500-lanai.0` at `2300cfc8ccb68255a3e218f7a27682a573351231` |
 | `xiaomi/touch-driver` | MiCode `vendor_xiaomi_proprietary_touch-driver` at `c286ab85f4982c9b5967e18405f4e2da0332ce4d` |
+| `qcom/opensource/display-drivers` | MiCode `vendor_opensource_display-drivers`, `bsp-zorn-v-oss` at `3f527f3e55ef27f240507ace3181d13900c3ed7f` |
 
 The imported snapshots are represented by one root commit because unrelated
 shallow histories cannot be combined into a new repository without either
