@@ -176,6 +176,7 @@ module_entry(
             "msm/mi_disp/mi_sde_encoder.c",
             "msm/mi_disp/mi_sde_connector.c",
             "msm/mi_disp/mi_disp_print.c",
+            "msm/mi_disp/mi_backlight_ktz8866.c",
          ],
          "CONFIG_MSM_SDE_ROTATOR":{
             True: [
