@@ -113,7 +113,7 @@ def define_niobe(t, v, lt=None):
 def define_pineapple(t, v, lt=None):
     print(t)
     define_target_modules(
-        target = "pineapple",
+        target = t,
         variant = v,
         registry = audio_modules,
         modules = [
@@ -353,7 +353,7 @@ def define_audio_target():
             define_blair(t, v)
         if t == "pitti":
             define_pitti(t, v)
-        if t == "pineapple":
+        if t in ["pineapple", "zorn"]:
             define_pineapple(t, v)
         if t == "kalama":
             define_kalama(t, v)

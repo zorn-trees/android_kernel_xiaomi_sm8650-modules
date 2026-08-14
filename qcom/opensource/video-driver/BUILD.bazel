@@ -22,6 +22,11 @@ ddk_headers(
 )
 
 ddk_headers(
+    name = "zorn_headers",
+    hdrs = [":pineapple_headers"],
+)
+
+ddk_headers(
     name = "cliffs_headers",
     hdrs = glob([
       "driver/platform/cliffs/inc/*.h",

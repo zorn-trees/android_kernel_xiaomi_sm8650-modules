@@ -89,11 +89,12 @@ def kgsl_get_srcs():
 
 def external_deps(target, variant):
     tv = "{}_{}".format(target, variant)
+    config_target = "pineapple" if target == "zorn" else target
     deplist = []
     defconfigs = []
 
     # Add msm_hw_fence in the dependency and defconfig lists for targets that use it
-    if target in [ "pineapple" ]:
+    if target in ["pineapple", "zorn"]:
         deplist = deplist + [
             "//kernel/xiaomi/sm8650-modules/qcom/opensource/mm-drivers/hw_fence:{}_msm_hw_fence".format(tv)
             ]
@@ -103,7 +104,7 @@ def external_deps(target, variant):
 
     native.genrule(
        name = "{}_defconfig".format(tv),
-       srcs = defconfigs + [ "config/{}_gpuconf".format(tv) ],
+       srcs = defconfigs + ["config/{}_{}_gpuconf".format(config_target, variant)],
        outs = [ "{}_defconfig.generated".format(tv) ],
        cmd = "cat $(SRCS) > $@"
     )
@@ -137,7 +138,10 @@ def define_target_variant_module(target, variant):
             "CONFIG_QCOM_KGSL_USE_SHMEM": { False: [ "kgsl_pool.c" ] },
             "CONFIG_SYNC_FILE": { True: [ "kgsl_sync.c" ] },
         },
-        deps = [ "//kernel/xiaomi/sm8650:all_headers" ] + ext_deps,
+        deps = [
+            "//kernel/xiaomi/sm8650:all_headers",
+            "//kernel/xiaomi/sm8650:devfreq_governor_headers",
+        ] + ext_deps,
         includes = ["include", "."],
         kernel_build = kernel_build,
         visibility = ["//visibility:private"]

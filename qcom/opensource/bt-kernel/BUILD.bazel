@@ -11,6 +11,7 @@ ddk_headers(
 load(":target.bzl", "define_pineapple")
 
 define_pineapple()
+define_pineapple("zorn")
 
 load(":target.bzl", "define_anorak61")
 

@@ -1,9 +1,9 @@
 load(":synx_modules.bzl", "synx_modules")
 load(":synx_module_build.bzl", "define_consolidate_gki_modules")
 
-def define_pineapple():
+def define_pineapple(target = "pineapple"):
     define_consolidate_gki_modules(
-        target = "pineapple",
+        target = target,
         registry = synx_modules,
         modules = [
             "synx-driver",

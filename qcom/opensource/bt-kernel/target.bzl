@@ -1,8 +1,8 @@
 load(":bt_kernel.bzl", "define_bt_modules")
 
-def define_pineapple():
+def define_pineapple(target = "pineapple"):
     define_bt_modules(
-        target = "pineapple",
+        target = target,
         modules = [
             "btpower",
             "bt_fm_slim",

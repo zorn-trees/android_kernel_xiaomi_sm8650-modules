@@ -116,7 +116,7 @@ def define_display_target():
             define_blair(t, v)
         if t == "pitti":
             define_pitti(t, v)
-        if t == "pineapple":
+        if t in ["pineapple", "zorn"]:
             define_pineapple(t, v)
 
     for (lt, t, v) in get_all_lunch_target_base_target_variants():

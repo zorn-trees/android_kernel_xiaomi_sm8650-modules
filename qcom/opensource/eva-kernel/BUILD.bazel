@@ -36,3 +36,4 @@ ddk_headers(
 
 load(":pineapple.bzl", "define_pineapple")
 define_pineapple()
+define_pineapple("zorn")

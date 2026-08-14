@@ -1,9 +1,9 @@
 load(":eva_modules.bzl", "eva_modules")
 load(":eva_module_build.bzl", "define_consolidate_gki_modules")
 
-def define_pineapple():
+def define_pineapple(target = "pineapple"):
     define_consolidate_gki_modules(
-        target = "pineapple",
+        target = target,
         registry = eva_modules,
         modules = [
             "msm-eva",
