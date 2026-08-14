@@ -251,7 +251,7 @@ int sem1217s_ois_fw_download(struct cam_ois_ctrl_t *o_ctrl)
 
 	if( ((current_fw_ver < new_fw_ver) && (0 == semco_ois_fw_update_op)) ||
 		(current_fw_ver != new_fw_ver) ||
-		(FIRMWARE_UPDATE_EVERY_TIMES == semco_ois_fw_update_op)) {
+		(SEM1217S_FIRMWARE_UPDATE_EVERY_TIMES == semco_ois_fw_update_op)) {
 
 		/* If there is firmware that needs to be updated, turn off OIS and AF */
 		if (0 != current_fw_ver) {

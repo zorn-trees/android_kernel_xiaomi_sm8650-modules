@@ -1,14 +1,15 @@
 load("//build/kernel/kleaf:kernel.bzl", "ddk_module")
 load("//build/bazel_common_rules/dist:dist.bzl", "copy_to_dist_dir")
 
-def _define_module(target, variant):
+def _define_module(target, variant, config_target = None):
     tv = "{}_{}".format(target, variant)
+    config_target = config_target or target
     deps = [
         ":camera_headers",
         ":camera_banner",
         "//kernel/xiaomi/sm8650:all_headers",
     ]
-    if target == "pineapple":
+    if target in ["pineapple", "zorn"]:
         deps.extend([
             "//kernel/xiaomi/sm8650-modules/qcom/opensource/synx-kernel:synx_headers",
             "//kernel/xiaomi/sm8650-modules/qcom/opensource/synx-kernel:{}_modules".format(tv),
@@ -153,9 +154,13 @@ def _define_module(target, variant):
                     "drivers/cam_sensor_module/cam_actuator/cam_actuator_dev.c",
                     "drivers/cam_sensor_module/cam_actuator/cam_actuator_core.c",
                     "drivers/cam_sensor_module/cam_actuator/cam_actuator_soc.c",
+                    "drivers/cam_sensor_module/cam_aperture/cam_aperture_dev.c",
+                    "drivers/cam_sensor_module/cam_aperture/cam_aperture_core.c",
+                    "drivers/cam_sensor_module/cam_aperture/cam_aperture_soc.c",
                     "drivers/cam_sensor_module/cam_cci/cam_cci_dev.c",
                     "drivers/cam_sensor_module/cam_cci/cam_cci_core.c",
                     "drivers/cam_sensor_module/cam_cci/cam_cci_soc.c",
+                    "drivers/cam_sensor_module/cam_cci/cam_cci_debug_util.c",
                     "drivers/cam_sensor_module/cam_tpg/cam_tpg_dev.c",
                     "drivers/cam_sensor_module/cam_tpg/cam_tpg_core.c",
                     "drivers/cam_sensor_module/cam_tpg/tpg_hw/tpg_hw.c",
@@ -173,6 +178,9 @@ def _define_module(target, variant):
                     "drivers/cam_sensor_module/cam_ois/cam_ois_dev.c",
                     "drivers/cam_sensor_module/cam_ois/cam_ois_core.c",
                     "drivers/cam_sensor_module/cam_ois/cam_ois_soc.c",
+                    "drivers/cam_sensor_module/cam_ois/bu24721.c",
+                    "drivers/cam_sensor_module/cam_ois/s10.c",
+                    "drivers/cam_sensor_module/cam_ois/sem1217s.c",
                     "drivers/cam_sensor_module/cam_sensor/cam_sensor_dev.c",
                     "drivers/cam_sensor_module/cam_sensor/cam_sensor_core.c",
                     "drivers/cam_sensor_module/cam_sensor/cam_sensor_soc.c",
@@ -187,6 +195,7 @@ def _define_module(target, variant):
                     "drivers/cam_sensor_module/cam_flash/cam_flash_core.c",
                     "drivers/cam_sensor_module/cam_flash/cam_flash_soc.c",
                     "drivers/cam_sensor_module/cam_sensor_module_debug.c",
+                    "drivers/cam_sensor_module/cam_sensor_utils/cam_parklens_thread.c",
                 ],
             },
             "CONFIG_SPECTRA_CUSTOM": {
@@ -218,8 +227,11 @@ def _define_module(target, variant):
         },
         copts = ["-include", "$(location :camera_banner)"],
         deps = deps,
+        includes = [
+            "drivers/cam_sensor_module/cam_aperture",
+        ],
         kconfig = "Kconfig",
-        defconfig = "{}_defconfig".format(tv),
+        defconfig = "{}_{}_defconfig".format(config_target, variant),
         kernel_build = "//kernel/xiaomi/sm8650:{}".format(tv),
     )
 
@@ -236,3 +248,5 @@ def _define_module(target, variant):
 def define_camera_module():
     _define_module("pineapple", "gki")
     _define_module("pineapple", "consolidate")
+    _define_module("zorn", "gki", "pineapple")
+    _define_module("zorn", "consolidate", "pineapple")

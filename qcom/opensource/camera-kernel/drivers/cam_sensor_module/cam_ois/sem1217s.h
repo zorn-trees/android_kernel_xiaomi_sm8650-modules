@@ -29,6 +29,7 @@
 #define FWUP_CTRL_256_SET 0x07
 #define APP_FW_SIZE  (48 * 1024)
 #define STATE_FW_UPDATE 0x02
+#define SEM1217S_FIRMWARE_UPDATE_EVERY_TIMES 1
 
 int sem1217s_ois_fw_download(struct cam_ois_ctrl_t *o_ctrl);
 
