@@ -18,8 +18,8 @@ def define_modules(target, variant):
 
     ddk_module(
         name = "{}_frpc-adsprpc".format(kernel_build_variant),
-        kernel_build = "//msm-kernel:{}".format(kernel_build_variant),
-        deps = ["//msm-kernel:all_headers"],
+        kernel_build = "//kernel/xiaomi/sm8650:{}".format(kernel_build_variant),
+        deps = ["//kernel/xiaomi/sm8650:all_headers"],
         srcs = [
             "dsp/adsprpc.c",
             "dsp/adsprpc_compat.c",
@@ -42,8 +42,8 @@ def define_modules(target, variant):
 
     ddk_module(
         name = "{}_cdsp-loader".format(kernel_build_variant),
-        kernel_build = "//msm-kernel:{}".format(kernel_build_variant),
-        deps = ["//msm-kernel:all_headers"],
+        kernel_build = "//kernel/xiaomi/sm8650:{}".format(kernel_build_variant),
+        deps = ["//kernel/xiaomi/sm8650:all_headers"],
         srcs = ["dsp/cdsp-loader.c"],
         out = "cdsp-loader.ko",
     )

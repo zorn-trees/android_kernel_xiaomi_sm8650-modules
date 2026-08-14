@@ -10,8 +10,8 @@ def define_modules(target, variant):
         out = "stm_st54se_gpio.ko",
         srcs = ["st54spi_gpio.c"],
         includes = [".", "linux"],
-        deps = ["//msm-kernel:all_headers"],
-        kernel_build = "//msm-kernel:{}".format(tv),
+        deps = ["//kernel/xiaomi/sm8650:all_headers"],
+        kernel_build = "//kernel/xiaomi/sm8650:{}".format(tv),
         visibility = ["//visibility:public"]
     )
 

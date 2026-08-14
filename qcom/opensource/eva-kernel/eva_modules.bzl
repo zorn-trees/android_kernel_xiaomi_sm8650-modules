@@ -35,11 +35,11 @@ register_eva_module(
     ],
     config_deps = {
        "TARGET_SYNX_ENABLE": [
-           "//vendor/qcom/opensource/synx-kernel:synx_headers",
-           "//vendor/qcom/opensource/synx-kernel:%b_modules"
+           "//kernel/xiaomi/sm8650-modules/qcom/opensource/synx-kernel:synx_headers",
+           "//kernel/xiaomi/sm8650-modules/qcom/opensource/synx-kernel:%b_modules"
         ],
         "TARGET_DSP_ENABLE": [
-             "//vendor/qcom/opensource/dsp-kernel:%b_frpc-adsprpc"
+             "//kernel/xiaomi/sm8650-modules/qcom/opensource/dsp-kernel:%b_frpc-adsprpc"
         ],
     },
 )

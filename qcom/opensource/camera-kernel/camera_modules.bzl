@@ -6,17 +6,17 @@ def _define_module(target, variant):
     deps = [
         ":camera_headers",
         ":camera_banner",
-        "//msm-kernel:all_headers",
+        "//kernel/xiaomi/sm8650:all_headers",
     ]
     if target == "pineapple":
         deps.extend([
-            "//vendor/qcom/opensource/synx-kernel:synx_headers",
-            "//vendor/qcom/opensource/synx-kernel:{}_modules".format(tv),
-            "//vendor/qcom/opensource/securemsm-kernel:smcinvoke_kernel_headers",
-            "//vendor/qcom/opensource/securemsm-kernel:smmu_proxy_headers",
-            "//vendor/qcom/opensource/securemsm-kernel:{}_smcinvoke_dlkm".format(tv),
-            "//vendor/qcom/opensource/securemsm-kernel:{}_smmu_proxy_dlkm".format(tv),
-            "//vendor/qcom/opensource/mmrm-driver:{}_mmrm_driver".format(tv),
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/synx-kernel:synx_headers",
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/synx-kernel:{}_modules".format(tv),
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/securemsm-kernel:smcinvoke_kernel_headers",
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/securemsm-kernel:smmu_proxy_headers",
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/securemsm-kernel:{}_smcinvoke_dlkm".format(tv),
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/securemsm-kernel:{}_smmu_proxy_dlkm".format(tv),
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/mmrm-driver:{}_mmrm_driver".format(tv),
         ])
     ddk_module(
         name = "{}_camera".format(tv),
@@ -220,7 +220,7 @@ def _define_module(target, variant):
         deps = deps,
         kconfig = "Kconfig",
         defconfig = "{}_defconfig".format(tv),
-        kernel_build = "//msm-kernel:{}".format(tv),
+        kernel_build = "//kernel/xiaomi/sm8650:{}".format(tv),
     )
 
     copy_to_dist_dir(

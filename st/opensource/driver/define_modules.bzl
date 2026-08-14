@@ -4,12 +4,12 @@ load("//build/bazel_common_rules/dist:dist.bzl", "copy_to_dist_dir")
 def define_modules(target, variant):
     tv = "{}_{}".format(target, variant)
     copts = []
-    deps = ["//msm-kernel:all_headers"]
+    deps = ["//kernel/xiaomi/sm8650:all_headers"]
 
     if target == "pineapple":
        copts.append("-DNFC_SECURE_PERIPHERAL_ENABLED")
-       deps += ["//vendor/qcom/opensource/securemsm-kernel:smcinvoke_kernel_headers",
-                "//vendor/qcom/opensource/securemsm-kernel:{}_smcinvoke_dlkm".format(tv)
+       deps += ["//kernel/xiaomi/sm8650-modules/qcom/opensource/securemsm-kernel:smcinvoke_kernel_headers",
+                "//kernel/xiaomi/sm8650-modules/qcom/opensource/securemsm-kernel:{}_smcinvoke_dlkm".format(tv)
        ]
 
     ddk_module(
@@ -22,7 +22,7 @@ def define_modules(target, variant):
         includes = [".", "linux", "nfc", "include/uapi/linux/nfc"],
         copts = copts,
         deps = deps,
-        kernel_build = "//msm-kernel:{}".format(tv),
+        kernel_build = "//kernel/xiaomi/sm8650:{}".format(tv),
         visibility = ["//visibility:public"]
     )
 

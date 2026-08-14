@@ -95,10 +95,10 @@ def external_deps(target, variant):
     # Add msm_hw_fence in the dependency and defconfig lists for targets that use it
     if target in [ "pineapple" ]:
         deplist = deplist + [
-            "//vendor/qcom/opensource/mm-drivers/hw_fence:{}_msm_hw_fence".format(tv)
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/mm-drivers/hw_fence:{}_msm_hw_fence".format(tv)
             ]
         defconfigs = defconfigs + [
-            "//vendor/qcom/opensource/mm-drivers/hw_fence:defconfig"
+            "//kernel/xiaomi/sm8650-modules/qcom/opensource/mm-drivers/hw_fence:defconfig"
             ]
 
     native.genrule(
@@ -113,7 +113,7 @@ def external_deps(target, variant):
 def define_target_variant_module(target, variant):
     tv = "{}_{}".format(target, variant)
     rule_name = "{}_msm_kgsl".format(tv)
-    kernel_build = "//msm-kernel:{}".format(tv)
+    kernel_build = "//kernel/xiaomi/sm8650:{}".format(tv)
 
     ext_deps = external_deps(target, variant)
 
@@ -137,7 +137,7 @@ def define_target_variant_module(target, variant):
             "CONFIG_QCOM_KGSL_USE_SHMEM": { False: [ "kgsl_pool.c" ] },
             "CONFIG_SYNC_FILE": { True: [ "kgsl_sync.c" ] },
         },
-        deps = [ "//msm-kernel:all_headers" ] + ext_deps,
+        deps = [ "//kernel/xiaomi/sm8650:all_headers" ] + ext_deps,
         includes = ["include", "."],
         kernel_build = kernel_build,
         visibility = ["//visibility:private"]
