@@ -7,6 +7,7 @@ KBUILD_OPTIONS += BOARD_PLATFORM=$(TARGET_BOARD_PLATFORM)
 KBUILD_OPTIONS += CONFIG_BT_HW_SECURE_DISABLE=y
 KBUILD_OPTIONS += CONFIG_MSM_BT_POWER=m
 KBUILD_OPTIONS += CONFIG_BTFM_SLIM=m
+KBUILD_OPTIONS += CONFIG_I2C_RTC6226_QCA=m
 KBUILD_EXTRA_SYMBOLS := \
     $(OUT_DIR)/../sm8650-modules/qcom/opensource/securemsm-kernel/Module.symvers \
     $(OUT_DIR)/../sm8650-modules/qcom/opensource/wlan/platform/Module.symvers
