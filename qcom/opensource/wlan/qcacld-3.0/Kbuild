@@ -143,6 +143,7 @@ HDD_OBJS := 	$(HDD_SRC_DIR)/wlan_hdd_assoc.o \
 		$(HDD_SRC_DIR)/wlan_hdd_tx_rx.o \
 		$(HDD_SRC_DIR)/wlan_hdd_wmm.o \
 		$(HDD_SRC_DIR)/wlan_hdd_wowl.o\
+		$(HDD_SRC_DIR)/wlan_hdd_ll_lt_sap.o\
 
 ifeq ($(CONFIG_UNIT_TEST), y)
 HDD_OBJS += $(HDD_SRC_DIR)/wlan_hdd_unit_test.o
@@ -1276,7 +1277,7 @@ FTM_OBJS := $(FTM_DISP_SRC)/wlan_ftm_init_deinit.o \
 	    $(FTM_CORE_SRC)/wlan_ftm_svc.o \
 	    $(TARGET_IF_FTM_SRC)/target_if_ftm.o
 
-ifeq ($(QCA_WIFI_FTM_NL80211), y)
+ifeq ($(CONFIG_QCA_WIFI_FTM_NL80211), y)
 FTM_OBJS += $(OS_IF_FTM_SRC)/wlan_cfg80211_ftm.o
 endif
 
@@ -2206,12 +2207,12 @@ DP_OBJS += $(DP_SRC)/be/dp_be_tx.o
 DP_OBJS += $(DP_SRC)/be/dp_be_rx.o
 
 ifeq ($(CONFIG_WIFI_MONITOR_SUPPORT), y)
-ifeq ($(CONFIG_WLAN_TX_MON_2_0), y)
+ifeq ($(CONFIG_WLAN_TX_MON_2_0_Y_WLAN_DP_LOCAL_PKT_CAPTURE), y)
 DP_OBJS += $(DP_SRC)/monitor/2.0/dp_mon_2.0.o \
 		$(DP_SRC)/monitor/2.0/dp_mon_filter_2.0.o
 DP_OBJS += $(DP_SRC)/monitor/2.0/dp_tx_mon_2.0.o \
 		$(DP_SRC)/monitor/2.0/dp_tx_mon_status_2.0.o
-ccflags-$(CONFIG_WLAN_TX_MON_2_0) += -DWLAN_PKT_CAPTURE_TX_2_0
+ccflags-$(CONFIG_WLAN_TX_MON_2_0_Y_WLAN_DP_LOCAL_PKT_CAPTURE) += -DWLAN_PKT_CAPTURE_TX_2_0
 ccflags-y += -DWLAN_TX_PKT_CAPTURE_ENH_BE
 ccflags-y += -DQDF_FRAG_CACHE_SUPPORT
 endif
@@ -2634,11 +2635,11 @@ endif
 ifeq (y,$(filter y,$(CONFIG_LITHIUM) $(CONFIG_BERYLLIUM) $(CONFIG_RHINE)))
 WLAN_DP_COMP_OBJS += $(DP_COMP_CORE_DIR)/wlan_dp_prealloc.o
 
-ifeq ($(CONFIG_WLAN_TX_MON_2_0), y)
+ifeq ($(CONFIG_WLAN_TX_MON_2_0_Y_WLAN_DP_LOCAL_PKT_CAPTURE), y)
 ifeq ($(CONFIG_WLAN_DP_LOCAL_PKT_CAPTURE), y)
 WLAN_DP_COMP_OBJS += $(DP_COMP_OS_IF_DIR)/os_if_dp_local_pkt_capture.o
 endif #CONFIG_WLAN_DP_LOCAL_PKT_CAPTURE
-endif #CONFIG_WLAN_TX_MON_2_0
+endif #CONFIG_WLAN_TX_MON_2_0_Y_WLAN_DP_LOCAL_PKT_CAPTURE
 endif
 
 ifeq ($(CONFIG_WLAN_FEATURE_DP_RX_THREADS), y)
@@ -3338,6 +3339,8 @@ INCS +=		$(COAP_CORE_INC)
 INCS +=		$(COAP_WMI_INC)
 ccflags-y += -include $(WLAN_ROOT)/../../dataipa/config/dataipa_vendor.h
 
+ccflags-y += -D__ANDROID_COMMON_KERNEL__
+
 ccflags-y += $(INCS)
 
 ccflags-y += -I$(srctree)/drivers/misc/hwid
@@ -3816,9 +3819,9 @@ ccflags-$(CONFIG_DEBUG_RX_RING_BUFFER) += -DDEBUG_RX_RING_BUFFER
 
 ccflags-$(CONFIG_DESC_TIMESTAMP_DEBUG_INFO) += -DDESC_TIMESTAMP_DEBUG_INFO
 
-ccflags-$(PANIC_ON_BUG) += -DPANIC_ON_BUG
+ccflags-$(CONFIG_PANIC_ON_BUG) += -DPANIC_ON_BUG
 
-ccflags-$(WLAN_WARN_ON_ASSERT) += -DWLAN_WARN_ON_ASSERT
+ccflags-$(CONFIG_WLAN_WARN_ON_ASSERT) += -DWLAN_WARN_ON_ASSERT
 
 ccflags-$(CONFIG_POWER_MANAGEMENT_OFFLOAD) += -DWLAN_POWER_MANAGEMENT_OFFLOAD
 
@@ -3829,7 +3832,7 @@ ccflags-$(CONFIG_WLAN_LOG_INFO) += -DWLAN_LOG_INFO
 ccflags-$(CONFIG_WLAN_LOG_DEBUG) += -DWLAN_LOG_DEBUG
 ccflags-$(CONFIG_WLAN_LOG_ENTER) += -DWLAN_LOG_ENTER
 ccflags-$(CONFIG_WLAN_LOG_EXIT) += -DWLAN_LOG_EXIT
-ccflags-$(WLAN_OPEN_SOURCE) += -DWLAN_OPEN_SOURCE
+ccflags-$(CONFIG_WLAN_OPEN_SOURCE) += -DWLAN_OPEN_SOURCE
 ccflags-$(CONFIG_FEATURE_STATS_EXT) += -DWLAN_FEATURE_STATS_EXT
 ccflags-$(CONFIG_QCACLD_FEATURE_NAN) += -DWLAN_FEATURE_NAN
 ccflags-$(CONFIG_QCACLD_FEATURE_SON) += -DWLAN_FEATURE_SON
@@ -3876,7 +3879,7 @@ ccflags-$(CONFIG_REMOVE_PKT_LOG) += -DREMOVE_PKT_LOG
 ccflags-$(CONFIG_ATH_11AC_TXCOMPACT) += -DATH_11AC_TXCOMPACT
 
 #ENABLE HTT HTC tx completion
-ccflags-$(ENABLE_CE4_COMP_DISABLE_HTT_HTC_MISC_LIST) += -DENABLE_CE4_COMP_DISABLE_HTT_HTC_MISC_LIST
+ccflags-$(CONFIG_ENABLE_CE4_COMP_DISABLE_HTT_HTC_MISC_LIST) += -DENABLE_CE4_COMP_DISABLE_HTT_HTC_MISC_LIST
 
 #Enable PCI specific APIS (dma, etc)
 ccflags-$(CONFIG_HIF_PCI) += -DHIF_PCI
@@ -5019,8 +5022,8 @@ else
 endif
 
 # Android wifi state control interface
-ifneq ($(WLAN_CTRL_NAME),)
-ccflags-y += -DWLAN_CTRL_NAME=\"$(WLAN_CTRL_NAME)\"
+ifneq ($(CONFIG_WLAN_CTRL_NAME),)
+ccflags-y += -DWLAN_CTRL_NAME=\"$(CONFIG_WLAN_CTRL_NAME)\"
 endif
 
 # inject some build related information
