@@ -1,7 +1,7 @@
 load(":audio_modules.bzl", "audio_modules")
 load(":module_mgr.bzl", "define_target_modules")
-load("//kernel/xiaomi/sm8650:target_variants.bzl", "get_all_lunch_target_base_target_variants")
-load("//kernel/xiaomi/sm8650:target_variants.bzl", "get_all_la_variants", "get_all_le_variants", "get_all_lxc_variants")
+load("//msm-kernel:target_variants.bzl", "get_all_lunch_target_base_target_variants")
+load("//msm-kernel:target_variants.bzl", "get_all_la_variants", "get_all_le_variants", "get_all_lxc_variants")
 
 def define_blair(t, v, lt=None):
     print(t)
@@ -113,7 +113,7 @@ def define_niobe(t, v, lt=None):
 def define_pineapple(t, v, lt=None):
     print(t)
     define_target_modules(
-        target = t,
+        target = "pineapple",
         variant = v,
         registry = audio_modules,
         modules = [
@@ -353,7 +353,7 @@ def define_audio_target():
             define_blair(t, v)
         if t == "pitti":
             define_pitti(t, v)
-        if t in ["pineapple", "zorn"]:
+        if t == "pineapple":
             define_pineapple(t, v)
         if t == "kalama":
             define_kalama(t, v)

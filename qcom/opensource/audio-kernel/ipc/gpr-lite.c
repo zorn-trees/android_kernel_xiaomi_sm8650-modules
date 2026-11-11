@@ -1,6 +1,6 @@
 /* Copyright (c) 2011-2017, 2019-2021 The Linux Foundation. All rights reserved.
  * Copyright (c) 2018, Linaro Limited
- * Copyright (c) 2022-2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -27,6 +27,9 @@
 #include <dsp/audio_notifier.h>
 
 #define APM_EVENT_MODULE_TO_CLIENT	0x03001000
+#define APM_CMD_GRAPH_CLOSE         0x01001004
+#define APM_CMD_GRAPH_OPEN          0x01001000
+#define GPR_IBASIC_RSP_RESULT 0x02001005
 #define WAKELOCK_TIMEOUT 200
 
 struct gpr {
@@ -42,6 +45,10 @@ struct gpr {
 	struct wakeup_source *wsource;
 };
 
+struct spf_cmd_basic_rsp {
+	uint32_t opcode;
+	int32_t status;
+};
 static struct gpr_q6 q6;
 static struct gpr *gpr_priv;
 
@@ -283,6 +290,7 @@ static int gpr_callback(struct rpmsg_device *rpdev, void *buf,
 	struct gpr_driver *adrv = NULL;
 	struct gpr_hdr *hdr;
 	unsigned long flags;
+	struct spf_cmd_basic_rsp *basic_rsp;
 	//uint32_t opcode_type;
 
 	if (len <= GPR_HDR_SIZE) {
@@ -314,6 +322,13 @@ static int gpr_callback(struct rpmsg_device *rpdev, void *buf,
 		dev_err(gpr->dev, "%s: Acquire wakelock in case of module event with timeout %d",
 			__func__, WAKELOCK_TIMEOUT);
 		pm_wakeup_ws_event(gpr_priv->wsource, WAKELOCK_TIMEOUT, true);
+	} else if (hdr->opcode ==  GPR_IBASIC_RSP_RESULT) {
+		basic_rsp = GPR_PKT_GET_PAYLOAD(
+				struct spf_cmd_basic_rsp, buf);
+		if(basic_rsp->opcode == APM_CMD_GRAPH_OPEN ||
+				basic_rsp->opcode == APM_CMD_GRAPH_CLOSE) {
+			trace_printk("gpr open/close token:0x%x\n", hdr->token);
+		}
 	}
 	svc_id = hdr->dst_port;
 	spin_lock_irqsave(&gpr->svcs_lock, flags);
@@ -339,7 +354,6 @@ static int gpr_callback(struct rpmsg_device *rpdev, void *buf,
 	 * NOTE: hdr_size is not same as GPR_HDR_SIZE as remote can include
 	 * optional headers in to gpr_hdr which should be ignored
 	 */
-
 	adrv->callback(svc, buf);
 
 	return 0;
@@ -381,15 +395,14 @@ static void gpr_device_remove(struct device *dev)
 	struct gpr_device *adev = to_gpr_device(dev);
 	struct gpr_driver *adrv;
 	struct gpr *gpr = dev_get_drvdata(adev->dev.parent);
-	unsigned long flags;
 
 	if (dev->driver) {
 		adrv = to_gpr_driver(dev->driver);
 		if (adrv->remove)
 			adrv->remove(adev);
-		spin_lock_irqsave(&gpr->svcs_lock, flags);
+		spin_lock(&gpr->svcs_lock);
 		idr_remove(&gpr->svcs_idr, adev->svc_id);
-		spin_unlock_irqrestore(&gpr->svcs_lock, flags);
+		spin_unlock(&gpr->svcs_lock);
 	}
 
 	return;
@@ -422,7 +435,6 @@ static int gpr_add_device(struct device *dev, struct device_node *np,
 	struct gpr *gpr = dev_get_drvdata(dev);
 	struct gpr_device *adev = NULL;
 	int ret;
-	unsigned long flags;
 
 	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
 	if (!adev)
@@ -447,10 +459,10 @@ static int gpr_add_device(struct device *dev, struct device_node *np,
 	adev->dev.release = gpr_dev_release;
 	adev->dev.driver = NULL;
 
-	spin_lock_irqsave(&gpr->svcs_lock, flags);
+	spin_lock(&gpr->svcs_lock);
 	idr_alloc(&gpr->svcs_idr, adev, id->svc_id,
 		  id->svc_id + 1, GFP_ATOMIC);
-	spin_unlock_irqrestore(&gpr->svcs_lock, flags);
+	spin_unlock(&gpr->svcs_lock);
 
 	dev_info_ratelimited(dev, "Adding GPR dev: %s\n", dev_name(&adev->dev));
 
