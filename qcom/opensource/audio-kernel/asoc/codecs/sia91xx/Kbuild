@@ -117,3 +117,5 @@ sia91xx_tuning_dlkm-y := $(SIA91XX_TUNING_OBJS)
 
 # inject some build related information
 DEFINES += -DBUILD_TIMESTAMP=\"$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')\"
+
+ccflags-y += -Wframe-larger-than=4096
