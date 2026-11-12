@@ -80,6 +80,16 @@ enum local_hbm_state {
 };
 
 /* feature_id: DISP_FEATURE_DBI corresponding feature_val */
+/* Bits reported in the data of MI_DISP_EVENT_FOD */
+enum fod_ui_ready_state {
+	LOCAL_HBM_UI_NONE = 0,
+	GLOBAL_FOD_HBM_OVERLAY = 1 << 0,
+	GLOBAL_FOD_ICON = 1 << 1,
+	FOD_LOW_BRIGHTNESS_CAPTURE = 1 << 2,
+	LOCAL_HBM_UI_READY = 1 << 3,
+	LOCAL_HBM_NEED_UPDATE_TO_FOD_FPS = 1 << 4,
+};
+
 enum dbi_by_temp_state {
 	TEMP_INDEX_20 = 20,
 	TEMP_INDEX_25 = 25,
