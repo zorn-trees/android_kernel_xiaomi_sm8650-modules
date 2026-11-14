@@ -328,7 +328,7 @@ int fts_read_lockdown_info(u8 *buf)
 /* N17 code for HQ-291087 by liunianliang at 2023/5/29 end */
 
 struct upgrade_func upgrade_func_ft5008 = {
-	.ctype = { 0x8C, 0x8D, 0x8E, 0x90 },
+	.ctype = { 0x90, 0x92 },
 	.fwveroff = 0x010E,
 	.fwcfgoff = 0x1F80,
 	.appoff = 0x0000,

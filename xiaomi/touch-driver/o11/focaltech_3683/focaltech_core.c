@@ -361,7 +361,7 @@ int fts_recover_after_reset(void)
 	u8 id = 0;
 	for (i = 0; i < 20; i++) {
 		fts_read_reg(0xA3, &id);
-		if(id == FTS_CHIP_TYPE_ID) {
+		if (id == fts_data->ic_info.ids.chip_idh) {
 			break;
 		}
 		msleep(10);
